@@ -4,34 +4,43 @@
     grid-gap: 10px;
     grid-template-rows: repeat(6, 115px);
     background-color: black;
+    color: 	#00FF00;
+    font-family: serif;
+    font-size: 18px;
 }
 
 #sceneBlock{
   background-color: black;
   grid-column: 5/7;
   grid-row: 1/4;
+  border: darkgray solid 1px;
+  padding: 5px;
 }
 
 #statusBlock{
-  background-color: orange;
   grid-column: 1/5;
   grid-row: 1;
+  border: darkgray solid 1px;
+  padding: 15px;
 }
 
 #textBlock{
-  background-color: red;
   grid-column: 1/5;
   grid-row: 2/6;
+  border: darkgray solid 1px;
+  padding: 15px;
 }
 
 #inputBlock{
-  background-color: yellow;
   grid-column: 1/5;
   grid-row: 6;
+  border: darkgray solid 1px;
+  padding: 15px;
 }
 
 #mapBlock{
-  background-color: blue;
   grid-column: 5/7;
   grid-row: 4/7;
+  border: darkgray solid 1px;
+  padding: 15px;
 }
