@@ -1,0 +1,13 @@
+{
+  "cells": [
+    { "xCoord": 1, "yCoord": 1, "portals": ["e","s"] },
+    { "xCoord": 2, "yCoord": 1, "portals": ["e","s","w"] },
+    { "xCoord": 3, "yCoord": 1, "portals": ["s","w"] },
+    { "xCoord": 1, "yCoord": 2, "portals": ["n","e","s"] },
+    { "xCoord": 2, "yCoord": 2, "portals": ["n","e","s","w"] },
+    { "xCoord": 3, "yCoord": 2, "portals": ["n","s","w"] },
+    { "xCoord": 1, "yCoord": 3, "portals": ["n","e"] },
+    { "xCoord": 2, "yCoord": 3, "portals": ["n","e","w"] },
+    { "xCoord": 3, "yCoord": 3, "portals": ["n","w"] }
+  ]
+}

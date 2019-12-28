@@ -21,14 +21,54 @@
   grid-column: 1/5;
   grid-row: 1;
   border: darkgray solid 1px;
-  padding: 15px;
+  padding: 5px 15px 15px 15px;
 }
 
 #textBlock{
   grid-column: 1/5;
   grid-row: 2/6;
   border: darkgray solid 1px;
-  padding: 15px;
+  padding: 5px;
+
+  display: grid;
+  grid-gap: 2px;
+  grid-template-rows: repeat(10, 1fr);
+  grid-template-columns: 1fr;
+  height: 460px;
+  overflow-y: scroll
+}
+
+#moveInput{
+  float: right;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  grid-gap: 2px;
+  border: darkgray solid 1px;
+}
+
+.moveButton[val=n]{
+  grid-row: 1;
+  grid-column: 2;
+}
+.moveButton[val=e]{
+  grid-row: 2;
+  grid-column: 3;
+}
+.moveButton[val=s]{
+  grid-row: 3;
+  grid-column: 2;
+}
+.moveButton[val=w]{
+  grid-row: 2;
+  grid-column: 1;
+}
+#moveInputDescription{
+  grid-row: 2;
+  grid-column: 2;
+  background-color: lightblue;
+  color: black;
+  text-align: center;
 }
 
 #inputBlock{
@@ -43,4 +83,26 @@
   grid-row: 4/7;
   border: darkgray solid 1px;
   padding: 15px;
+}
+
+
+.textInput {
+  padding: 0px;
+  margin: 0px;
+  border-top: darkgray solid 1px;
+}
+
+.status {
+  padding: 10px;
+  margin-right: 25px;
+  border: darkgray solid 1px;
+}
+
+.gridCell{
+  background-color: red;
+}
+
+#mapGrid{
+  display: grid;
+  background-color: white;
 }
