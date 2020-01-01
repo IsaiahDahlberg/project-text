@@ -1,56 +1,100 @@
 $(document).ready(function () {
-  var hero = new character("Xeraeth", 100, 50, 5, 5, 5);
-  var text = new textBox();
-  var grid = new mapGrid();
-  var currentX = 1;
-  var currentY = 1;
+  const hero = new character("Hero", 100, 50, 5, 5, 5);
+  const text = new textBox();
+  const grid = new mapGrid();
+  const mFactory = new monsterFactory();
+  let currentX = 2;
+  let currentY = 4;
+  let roomsEncountered = [currentX, currentY];
+  let inCombat = false;
+  let monster = null;
 
-  grid.renderGrid();
+  init();
 
-  $("#takeDamageButton").on("click", function(){
-    hero.takeDamage(10);
-    text.appendText("You take 5 damage");
-    updateStatus(hero);
-  })
+  console.log(inCombat);
+  if(inCombat){
+    $("#swingSword").on("click", function(){
+      hero.takeDamage(10);
+      text.appendText("You take 5 damage");
+    })
 
-  $(".moveButton").on("click", function(event){
-    let dir = event.currentTarget.attributes[1].value;
-    var check = grid.checkRoomForPortal(currentX, currentY, dir)
-    console.log(check);
-    console.log(dir);
-    if(check){
-      switch(dir){
-        case "n":
-          currentY -= 1;
-          text.appendText("X:" + currentX + " Y:" + currentY + "- You move into a room north of where you were");
-          break;
-        case "e":
-          currentX += 1;
-          text.appendText("X:" + currentX + " Y:" + currentY + "- You move into a room east of where you were");
-          break;
-        case "s":
-          currentY += 1;
-          text.appendText("X:" + currentX + " Y:" + currentY + "- You move into a room south of where you were");
-          break;
-        case "w":
-          currentX -= 1;
-          text.appendText("X:" + currentX + " Y:" + currentY + "- You move into a room west of where you were");
-          break;
+  }else{
+    $("#surveilAreaButton").on("click", () => text.appendText("X:" + currentX + " Y:" + currentY + "- " + grid.getRoomDescription(currentX, currentY)))
+
+    $(".moveButton").on("click", function(event){
+      let direction = event.currentTarget.attributes["dir"].value;
+      if(grid.checkRoomForPortal(currentX, currentY, direction)){
+        moveAndUpdatePostion(direction);
+        checkRoomEncounter();
+        checkRoomForMonster();
+      }else{
+          text.appendText("There is no portal in that direction");
       }
-    }else{
-      text.appendText("There is no portal in that direction");
-    }
-  })
+    })
+  }
 
-  updateStatus(hero);
+  const moveAndUpdatePostion = (d) => {
+    var result = updateCoordinates(currentX, currentY, d);
+    currentX = result.newX;
+    currentY = result.newY;
+
+    let roomMessage = "X:" + currentX + " Y:" + currentY + "- You move ";
+    roomMessage += ( d === "n" ? "North. " : d === "e" ? "East. " : d === "s" ? "South. " : "West. ");
+    roomMessage += checkRoomEncounter() || "";
+    text.appendText(roomMessage);
+    grid.renderGrid(currentX, currentY);
+  }
+  const checkRoomForMonster = () => {
+    monster = grid.getRoomMonster(currentX, currentY);
+    console.log(monster);
+    inCombat = monster ? true : false;
+    return inCombat;
+  }
+  const checkRoomEncounter = () => {
+    if(!roomsEncountered.some(r => r === currentX + " " + currentY)){
+      updateRoomsEncountered();
+      return grid.getRoomEncounter(currentX, currentY);
+    }
+  }
+  const updateRoomsEncountered = () => {
+    let coords = currentX + " " + currentY;
+    if(roomsEncountered.some(r => r === coords)) return;
+    roomsEncountered.push(coords);
+  }
+  function updateCoordinates(currentX, currentY, direction){
+    switch(direction){
+      case "n":
+        currentY -= 1;
+        break;
+      case "e":
+        currentX += 1;
+        break;
+      case "s":
+        currentY += 1;
+        break;
+      case "w":
+        currentX -= 1;
+        break;
+    }
+    return { newX: currentX, newY: currentY }
+  }
+  function updateStatus(hero) {
+    let { name, healthPoints, manaPoints, attackPoints, magicPoints, armorPoints } = hero;
+    $("#heroName").text(name);
+    $("#hpBar").text("HP: " + healthPoints);
+    $("#mpBar").text("MP: " + manaPoints);
+    $("#armor").text("Armor: " + armorPoints);
+    $("#attackPower").text("Attack Power: " + attackPoints);
+    $("#magicPower").text("Magic Power: " + magicPoints);
+  }
+  function init(){
+    updateStatus(hero);
+    grid.renderGrid(currentX, currentY);
+    let roomInfo = grid.getRoomInfo(currentX, currentY);
+    text.appendText("X:" + currentX + " Y:" + currentY + "- " + roomInfo.description);
+    text.appendText(roomInfo.encounterMessage);
+  }
 });
 
-function updateStatus(hero) {
-  let { name, healthPoints, manaPoints, attackPoints, magicPoints, armorPoints } = hero;
-  $("#heroName").text(name);
-  $("#hpBar").text("HP: " + healthPoints);
-  $("#mpBar").text("MP: " + manaPoints);
-  $("#armor").text("Armor: " + armorPoints);
-  $("#attackPower").text("Attack Power: " + attackPoints);
-  $("#magicPower").text("Magic Power: " + magicPoints);
-}
+//not used?
+const checkIfBeenToRoom = (currentX, currentY, roomsEncountered) => roomsEncountered.any(room => room.x === currentX && room.y === currentY);

@@ -1,13 +1,14 @@
 {
   "cells": [
-    { "xCoord": 1, "yCoord": 1, "portals": ["e","s"] },
-    { "xCoord": 2, "yCoord": 1, "portals": ["e","s","w"] },
-    { "xCoord": 3, "yCoord": 1, "portals": ["s","w"] },
-    { "xCoord": 1, "yCoord": 2, "portals": ["n","e","s"] },
-    { "xCoord": 2, "yCoord": 2, "portals": ["n","e","s","w"] },
-    { "xCoord": 3, "yCoord": 2, "portals": ["n","s","w"] },
-    { "xCoord": 1, "yCoord": 3, "portals": ["n","e"] },
-    { "xCoord": 2, "yCoord": 3, "portals": ["n","e","w"] },
-    { "xCoord": 3, "yCoord": 3, "portals": ["n","w"] }
+    { "xCoord": 1, "yCoord": 1, "portals": ["e","s"], "description": "You enter a room", "encounterMessage": null },
+    { "xCoord": 2, "yCoord": 1, "portals": ["e","s","w"], "description": "You enter a room", "encounterMessage": null },
+    { "xCoord": 3, "yCoord": 1, "portals": ["s","w"], "description": "You enter a room", "encounterMessage": null },
+    { "xCoord": 1, "yCoord": 2, "portals": ["n","e","s"], "description": "You enter a room", "encounterMessage": null },
+    { "xCoord": 2, "yCoord": 2, "portals": ["n","e","s","w"], "description": "You enter a room", "encounterMessage": null },
+    { "xCoord": 3, "yCoord": 2, "portals": ["n","s","w"], "description": "You enter a room", "encounterMessage": null },
+    { "xCoord": 1, "yCoord": 3, "portals": ["n","e"], "description": "You enter a room", "encounterMessage": null },
+    { "xCoord": 2, "yCoord": 3, "portals": ["e","w"], "description": "There is a door way to the East and West of where you are", "encounterMessage": "You see a sword laying on the ground. You take the sword" },
+    { "xCoord": 3, "yCoord": 3, "portals": ["n","w"], "description": "You enter a room", "encounterMessage": null },
+    { "xCoord": 2, "yCoord": 4, "portals": ["n"], "description": "You wake up in a dark room. You are dazed and unsure of how you got here. You have no previous memories. Upon looking around the room you see only one door way straight ahead.", "encounterMessage": "You also see a map laying on the ground infront of you. You grab it." },
   ]
 }

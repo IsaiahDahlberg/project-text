@@ -8,19 +8,30 @@
       <script src="./javaScript/textBox.js"></script>
       <script src="./javaScript/character.js"></script>
       <script src="./javaScript/mapGrid.js"></script>
+      <script src="./javaScript/monsterFactory.js"></script>
 
       <script src="./javaScript/controller.js"></script>
     </head>
     <body style="background-color: black;">
         <div id="wrapper">
           <div id="statusBlock">
-            <p><b id="heroName">not set</b></p>
-            <div>
-              <span class="status" id="hpBar">not set</span>
-              <span class="status" id="mpBar">not set</span>
-              <span class="status" id="attackPower">not set</span>
-              <span class="status" id="magicPower">not set</span>
-              <span class="status" id="armor">not set</span>
+            <div id="heroStatus">
+              <p><b id="heroName">not set</b></p>
+              <div>
+                <span class="status" id="hpBar">not set</span>
+                <span class="status" id="mpBar">not set</span>
+                <span class="status" id="attackPower">not set</span>
+                <span class="status" id="magicPower">not set</span>
+                <span class="status" id="armor">not set</span>
+              </div>
+            </div>
+            <div id="monsterStatus">
+              <p><b id="monsterName">not set</b></p>
+              <div>
+                <span class="status" id="monsterHpBar">not set</span>
+                <span class="status" id="monsterAttackPower">not set</span>
+                <span class="status" id="monsterArmor">not set</span>
+              </div>
             </div>
           </div>
           <div id="sceneBlock">
@@ -33,17 +44,18 @@
           <div id="textBlock">
           </div>
           <div id="inputBlock">
-            <button id="takeDamageButton">Take 5 damage</button>
+            <button id="swingSword">Swing Sword</button>
+            <button id="surveilAreaButton">Surveil Area</button>
             <div id="moveInput">
-              <button val="n" class="moveButton">North</button>
-              <button val="e" class="moveButton">East</button>
-              <button val="s" class="moveButton">South</button>
-              <button val="w" class="moveButton">West</button>
+              <button dir="n" class="moveButton">North</button>
+              <button dir="e" class="moveButton">East</button>
+              <button dir="s" class="moveButton">South</button>
+              <button dir="w" class="moveButton">West</button>
               <div id="moveInputDescription">Move</div>
             </div>
           </div>
           <div id="mapBlock">
-            
+            <div id="mapGrid"></div>
           </div>
         </div>
     </body>
