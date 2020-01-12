@@ -21,17 +21,27 @@
   grid-column: 1/5;
   grid-row: 1;
   border: darkgray solid 1px;
-  padding: 5px 15px 15px 15px;
 
   display: grid;
 }
 
 #heroStatus{
   grid-column: 1;
+  border: navy solid 3px;
+  width: 520px;
 }
 
 #monsterStatus{
   grid-column: 2;
+  width: 465px;
+  border: darkRed solid 3px;
+}
+
+.status {
+  padding: 10px;
+  margin-right: 5px;
+  margin-left: 5px;
+  border: darkgray solid 1px;
 }
 
 #textBlock{
@@ -73,6 +83,7 @@
   grid-row: 2;
   grid-column: 1;
 }
+
 #moveInputDescription{
   grid-row: 2;
   grid-column: 2;
@@ -99,12 +110,6 @@
   padding: 0px;
   margin: 0px;
   border-top: darkgray solid 1px;
-}
-
-.status {
-  padding: 10px;
-  margin-right: 25px;
-  border: darkgray solid 1px;
 }
 
 .gridCell{

@@ -1,4 +1,4 @@
-class textBox {
+class TextBox {
   constructor() {
     this.texts = [];
 
@@ -9,6 +9,8 @@ class textBox {
     var time = new Date();
     var timeStamp = time.getHours() + ":" + time.getMinutes() + ":" + time.getSeconds() + " - ";
     $("#textBlock").append("<p class='textInput'>" + timeStamp + text + "</p>");
-    $("#textBlock").scrollTop($("#textBlock").height());
+    $("#textBlock").scrollTop(99999999999999999999999);
   }
 }
+
+export default TextBox

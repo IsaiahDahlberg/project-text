@@ -5,18 +5,14 @@
       <title>Project Text</title>
       <link rel="stylesheet" type="text/css" href="./css/index.css" media="screen"/>
       <script src="jquery-3.4.1.min.js"></script>
-      <script src="./javaScript/textBox.js"></script>
-      <script src="./javaScript/character.js"></script>
-      <script src="./javaScript/mapGrid.js"></script>
-      <script src="./javaScript/monsterFactory.js"></script>
 
-      <script src="./javaScript/controller.js"></script>
+      <script type="module" src="./javaScript/index.mjs"></script>
     </head>
     <body style="background-color: black;">
         <div id="wrapper">
           <div id="statusBlock">
             <div id="heroStatus">
-              <p><b id="heroName">not set</b></p>
+              <p style="margin-left: 5px;"><b id="heroName">not set</b></p>
               <div>
                 <span class="status" id="hpBar">not set</span>
                 <span class="status" id="mpBar">not set</span>
@@ -26,7 +22,7 @@
               </div>
             </div>
             <div id="monsterStatus">
-              <p><b id="monsterName">not set</b></p>
+              <p style="margin-left: 5px;"><b id="monsterName">not set</b></p>
               <div>
                 <span class="status" id="monsterHpBar">not set</span>
                 <span class="status" id="monsterAttackPower">not set</span>

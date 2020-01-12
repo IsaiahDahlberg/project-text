@@ -1,100 +1,161 @@
-$(document).ready(function () {
-  const hero = new character("Hero", 100, 50, 5, 5, 5);
-  const text = new textBox();
-  const grid = new mapGrid();
-  const mFactory = new monsterFactory();
-  let currentX = 2;
-  let currentY = 4;
-  let roomsEncountered = [currentX, currentY];
-  let inCombat = false;
-  let monster = null;
+class Controller{
+  constructor(character, textBox, mapGrid, monsterFactory){
+    console.log("Hit line")
+    this.hero = character;
+    this.textBox = textBox;
+    this.mapGrid = mapGrid;
+    this.mFactory = monsterFactory;
 
-  init();
+    this.currentX = 2;
+    this.currentY = 4;
+    this.roomsEncountered = [this.currentX, this.currentY];
+    this.inCombat = false;
+    this.monster = null;
 
-  console.log(inCombat);
-  if(inCombat){
-    $("#swingSword").on("click", function(){
-      hero.takeDamage(10);
-      text.appendText("You take 5 damage");
-    })
+    this.updateStatus = this.updateStatus.bind(this);
+    this.init = this.init.bind(this);
+  }
 
-  }else{
-    $("#surveilAreaButton").on("click", () => text.appendText("X:" + currentX + " Y:" + currentY + "- " + grid.getRoomDescription(currentX, currentY)))
+  swingSwordButton(event){
+    let heroAttackDmg = this.hero.attack();
+    let monsterDied = this.monster.takeDamage(heroAttackDmg);
+    if(monsterDied){
+      this.textBox.appendText(this.hero.name + " swings at " + this.monster.name + " dealing " + heroAttackDmg +" damage. " + this.monster.name + " falls down dead");
+      this.inCombat = false;
+      this.monster = null;
+    }else{
+      this.textBox.appendText(this.hero.name + " swings at " + this.monster.name + " dealing " + heroAttackDmg +" damage.");
 
-    $(".moveButton").on("click", function(event){
-      let direction = event.currentTarget.attributes["dir"].value;
-      if(grid.checkRoomForPortal(currentX, currentY, direction)){
-        moveAndUpdatePostion(direction);
-        checkRoomEncounter();
-        checkRoomForMonster();
+      let monsterAttackDmg = this.monster.attack();
+      let heroDied =  this.hero.takeDamage(monsterAttackDmg);
+      this.textBox.appendText(this.monster.name + " swings at " + this.hero.name + " dealing " + monsterAttackDmg +" damage.");
+      if(heroDied){
+        this.textBox.appendText(this.monster.name + " swings at " + this.hero.name + " dealing " + monsterAttackDmg +" damage. " + this.hero.name + " falls down dead");
       }else{
-          text.appendText("There is no portal in that direction");
+        this.textBox.appendText(this.hero.name + " swings at " + this.monster.name + " dealing " + heroAttackDmg +" damage.");
       }
-    })
+    }
+    this.updateStatus();
+  }
+  surveilButton(event){
+    if(this.inCombat) return;
+    this.textBox.appendText("X:" + this.currentX + " Y:" + this.currentY + "- " + this.mapGrid.getRoomDescription(this.currentX, this.currentY))
+  }
+  arrowKeys(event){
+    if(this.inCombat) return;
+    let dir = null;
+    switch(event.which){
+      case 119:
+        dir = "n";
+        break;
+      case 100:
+        dir = "e";
+        break;
+      case 115:
+        dir = "s";
+        break;
+      case 97:
+        dir = "w";
+        break;
+    }
+    if(!dir) return;
+    this.checkForMove(dir);
+  }
+  moveButton(event){
+    if(this.inCombat) return;
+    let direction = event.currentTarget.attributes["dir"].value;
+    this.checkForMove(direction);
   }
 
-  const moveAndUpdatePostion = (d) => {
-    var result = updateCoordinates(currentX, currentY, d);
-    currentX = result.newX;
-    currentY = result.newY;
-
-    let roomMessage = "X:" + currentX + " Y:" + currentY + "- You move ";
-    roomMessage += ( d === "n" ? "North. " : d === "e" ? "East. " : d === "s" ? "South. " : "West. ");
-    roomMessage += checkRoomEncounter() || "";
-    text.appendText(roomMessage);
-    grid.renderGrid(currentX, currentY);
-  }
-  const checkRoomForMonster = () => {
-    monster = grid.getRoomMonster(currentX, currentY);
-    console.log(monster);
-    inCombat = monster ? true : false;
-    return inCombat;
-  }
-  const checkRoomEncounter = () => {
-    if(!roomsEncountered.some(r => r === currentX + " " + currentY)){
-      updateRoomsEncountered();
-      return grid.getRoomEncounter(currentX, currentY);
+  checkRoomForMonster(){
+    let monsterKey = this.mapGrid.getRoomMonster(this.currentX, this.currentY);
+    this.inCombat = monsterKey ? true : false;
+    if(this.inCombat){
+      this.monster = this.mFactory.getMonster(monsterKey, "Billy", 50, 5, 3, 6);
+      this.textBox.appendText("You enter combat with a " + monsterKey);
+      this.updateMonsterStatus();
     }
   }
-  const updateRoomsEncountered = () => {
-    let coords = currentX + " " + currentY;
-    if(roomsEncountered.some(r => r === coords)) return;
-    roomsEncountered.push(coords);
+  checkRoomEncounter(){
+    if(!this.roomsEncountered.some(r => r === this.currentX + " " + this.currentY)){
+      this.updateRoomsEncountered();
+      this.checkRoomForMonster();
+      return this.mapGrid.getRoomEncounter(this.currentX, this.currentY);
+    }
   }
-  function updateCoordinates(currentX, currentY, direction){
+  checkForMove(direction){
+    if(this.mapGrid.checkRoomForPortal(this.currentX, this.currentY, direction)){
+      this.moveAndUpdatePostion(direction);
+      this.checkRoomEncounter();
+    }else{
+      this.textBox.appendText("There is no portal in that direction");
+    }
+  }
+  moveAndUpdatePostion(d){
+    this.updateCoordinates(this.currentX, this.currentY, d);
+
+    let roomMessage = "X:" + this.currentX + " Y:" + this.currentY + "- You move ";
+    roomMessage += ( d === "n" ? "North. " : d === "e" ? "East. " : d === "s" ? "South. " : "West. ");
+    roomMessage += this.checkRoomEncounter() || "";
+    this.textBox.appendText(roomMessage);
+    this.mapGrid.renderGrid(this.currentX, this.currentY);
+  }
+  updateRoomsEncountered(){
+    let coords = this.currentX + " " + this.currentY;
+    if(this.roomsEncountered.some(r => r === coords)) return;
+    this.roomsEncountered.push(coords);
+  }
+  updateCoordinates(x, y, direction){
     switch(direction){
       case "n":
-        currentY -= 1;
+        y -= 1;
         break;
       case "e":
-        currentX += 1;
+        x += 1;
         break;
       case "s":
-        currentY += 1;
+        y += 1;
         break;
       case "w":
-        currentX -= 1;
+        x -= 1;
         break;
     }
-    return { newX: currentX, newY: currentY }
+
+    this.currentX = x;
+    this.currentY = y;
   }
-  function updateStatus(hero) {
-    let { name, healthPoints, manaPoints, attackPoints, magicPoints, armorPoints } = hero;
+  updateStatus() {
+    this.updateHeroStatus();
+    this.updateMonsterStatus();
+  }
+  updateHeroStatus(){
+    let { name, healthPoints, manaPoints, attackPoints, magicPoints, armorPoints } = this.hero;
     $("#heroName").text(name);
     $("#hpBar").text("HP: " + healthPoints);
     $("#mpBar").text("MP: " + manaPoints);
     $("#armor").text("Armor: " + armorPoints);
-    $("#attackPower").text("Attack Power: " + attackPoints);
-    $("#magicPower").text("Magic Power: " + magicPoints);
+    $("#attackPower").text("Att: " + attackPoints);
+    $("#magicPower").text("Magic: " + magicPoints);
   }
-  function init(){
-    updateStatus(hero);
-    grid.renderGrid(currentX, currentY);
-    let roomInfo = grid.getRoomInfo(currentX, currentY);
-    text.appendText("X:" + currentX + " Y:" + currentY + "- " + roomInfo.description);
-    text.appendText(roomInfo.encounterMessage);
+  updateMonsterStatus(){
+    if(!this.monster) {
+      $("#monsterStatus").hide();
+      return;
+    }
+    $("#monsterStatus").show();
+    let { name, healthPoints, attackPoints, armor} = this.monster;
+    $("#monsterName").text(name);
+    $("#monsterHpBar").text("HP: " + healthPoints);
+    $("#monsterAttackPower").text("Att: " + attackPoints);
+    $("#monsterArmor").text("Armor: " + armor);
   }
-});
+  init(){
+    this.updateStatus(this.hero);
+    this.mapGrid.renderGrid(this.currentX, this.currentY);
+    let roomInfo = this.mapGrid.getRoomInfo(this.currentX, this.currentY);
+    this.textBox.appendText("X:" + this.currentX + " Y:" + this.currentY + "- " + roomInfo.description);
+    this.textBox.appendText(roomInfo.encounterMessage);
+  }
+}
 
-//not used?
-const checkIfBeenToRoom = (currentX, currentY, roomsEncountered) => roomsEncountered.any(room => room.x === currentX && room.y === currentY);
+export default Controller;

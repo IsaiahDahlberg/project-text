@@ -9,7 +9,6 @@ $(document).ready(function () {
 
 
   updateStatus(hero.healthPoints);
-
 });
 
 function updateStatus(hp) {

@@ -1,23 +1,28 @@
-class monsterFactory{
+class MonsterFactory{
   constructor(){
-    this.monsterIndex = [
+    this.monsterIndex = new Map([
       ["goblin", this.getGoblin]
-    ];
+    ]);
 
+    this.getMonster = this.getMonster.bind(this);
     this.getGoblin = this.getGoblin.bind(this);
   }
 
+  getMonster(monsterKey, name, hp, att, armor){
+    let func = this.monsterIndex.get(monsterKey);
+    return func(name, hp, att, armor);
+  }
   getGoblin(name, hp, att, armor){
-    console.log("Goblin " + name + hp + att + armor);
+    return new Monster(name, hp, att, armor);
   }
 }
 
-class monster{
-  constructor(name, healthPoints, attackPoints, armorPoints){
+class Monster{
+  constructor(name, healthPoints, attackPoints, armor){
     this.name = name;
     this.healthPoints = healthPoints;
     this.attackPoints = attackPoints;
-    this.armorPoints = armorPoints;
+    this.armor = armor;
 
     this.attack = this.attack.bind(this);
     this.takeDamage = this.takeDamage.bind(this);
@@ -29,7 +34,11 @@ class monster{
   takeDamage(dmg, magic){
     if(!magic){
       this.healthPoints -= dmg;
-      console.log("Monster took " + dmg +"dmg hp is now" + this.healthPoints);
-    }
-  }
+      if(this.healthPoints <= 0)
+       return true;
+
+      return false;
+  }}
 }
+
+export default MonsterFactory

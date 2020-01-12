@@ -1,4 +1,4 @@
-class character {
+class Character {
   constructor(name, healthPoints, manaPoints, attackPoints, magicPoints, armorPoints) {
     this.name = name;
     this.healthPoints = healthPoints;
@@ -7,11 +7,21 @@ class character {
     this.magicPoints = magicPoints;
     this.armorPoints = armorPoints;
 
+    this.attack = this.attack.bind(this);
     this.takeDamage = this.takeDamage.bind(this);
   }
 
-  takeDamage(dmg){
-    if(typeof dmg === "number"){
-      this.healthPoints = this.healthPoints - ( dmg > this.armorPoints ? dmg - this.armorPoints : 0 );
+  attack(){
+    return this.attackPoints;
+  }
+  takeDamage(dmg, magic){
+    if(!magic){
+      this.healthPoints -= dmg;
+      if(this.healthPoints <= 0)
+       return true;
+
+      return false;
   }}
 }
+
+export default Character;
