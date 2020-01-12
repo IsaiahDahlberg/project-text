@@ -1,6 +1,5 @@
 class Controller{
   constructor(character, textBox, mapGrid, monsterFactory){
-    console.log("Hit line")
     this.hero = character;
     this.textBox = textBox;
     this.mapGrid = mapGrid;
@@ -149,7 +148,8 @@ class Controller{
     $("#monsterAttackPower").text("Att: " + attackPoints);
     $("#monsterArmor").text("Armor: " + armor);
   }
-  init(){
+  async init(){
+    await this.mapGrid.init();
     this.updateStatus(this.hero);
     this.mapGrid.renderGrid(this.currentX, this.currentY);
     let roomInfo = this.mapGrid.getRoomInfo(this.currentX, this.currentY);
